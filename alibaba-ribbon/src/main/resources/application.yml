@@ -1,0 +1,16 @@
+server:
+  port: 8084
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  application:
+    name: alibaba-ribbon
+ribbon:
+  eager-load:
+    enabled: true #开启饥饿加载
+    clients: alibaba-provider #为哪些服务的名称开启饥饿加载,多个用逗号分隔
+alibaba-provider:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule

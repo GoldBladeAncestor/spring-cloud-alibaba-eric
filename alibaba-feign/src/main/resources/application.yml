@@ -1,0 +1,24 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: alibaba-feign
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8080
+      datasource:
+       flow:
+        nacos:
+         server-addr: 127.0.0.1:8848
+         dataId: alibaba-feign-sentinel
+         groupId: DEFAULT_GROUP
+         ruleType: flow
+feign:
+  sentinel:
+    enabled: true

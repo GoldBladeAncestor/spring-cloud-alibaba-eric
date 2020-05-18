@@ -1,0 +1,46 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: alibaba-gateway
+  redis:
+    host: 192.168.200.129
+    port: 6379
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+      routes:
+        - id: provider_route
+          uri: lb://alibaba-provider
+          predicates:
+            - Path=/to_provider/**
+          filters:
+            - StripPrefix=1 # 去除请求地址中的to_client
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 1
+#                redis-rate-limiter.burstCapacity: 5
+#                key-resolver: '#{@ipKeyResolver}'
+        - id: weight1
+          uri: http://localhost:8080/echo/s1
+          predicates:
+            - Path=/weight
+            - Weight=service1, 95
+          filters:
+            - StripPrefix=1
+        - id: weight2
+          uri: http://localhost:8080/echo/s2
+          predicates:
+            - Path=/weight
+            - Weight=service1, 5
+          filters:
+            - StripPrefix=1
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        server-addr: 127.0.0.1:8848
